@@ -14,6 +14,7 @@
 </head>
 <body>
 <div id="app">
+    hello world
     <router-view></router-view>
 </div>
 <script type="text/javascript" src="{{ assert('js/app.js') }}"></script>
