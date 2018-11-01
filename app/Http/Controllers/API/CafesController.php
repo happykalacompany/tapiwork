@@ -1,5 +1,5 @@
 <?php
-namespace app\Http\Controllers\Web;
+namespace app\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cafe;
@@ -48,5 +48,9 @@ class CafesController extends Controller{
         $cafe->save();
 
         return response()->json($cafe, 201);
+    }
+
+    public function hello(){
+        echo 'hello worle';exit;
     }
 }
