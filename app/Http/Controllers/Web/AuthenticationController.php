@@ -64,6 +64,6 @@ class AuthenticationController extends Controller{
         //登录用户
         Auth::login($user);
         //跳转到主页
-        return redirect('/');
+        return redirect('/#/home');
     }
 }

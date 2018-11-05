@@ -39,5 +39,5 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
      * Method: post
      * Description: add new cafe
      */
-    Route::post('cafes', 'API\CafesController@postNewCafe');
+    Route::post('/cafes', 'API\CafesController@postNewCafe');
 });
