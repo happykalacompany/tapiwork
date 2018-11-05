@@ -5,7 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cafe;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use App\Http\Requests\StoreCafeRequest;
 /**
  * @abstract 咖啡店的操作控制器类
  * 
@@ -37,13 +37,13 @@ class CafesController extends Controller{
      * method: post
      * description: add new cafe
      */
-    public function postNewCafe(Request $request){
+    public function postNewCafe(StoreCafeRequest $request){
         $cafe = new Cafe();
-        $cafe->name = $request->get('name');
-        $cafe->address = $request->get('address');
-        $cafe->city = $request->get('city');
-        $cafe->state = $request->get('state');
-        $cafe->zip = $request->get('zip');
+        $cafe->name = $request->input('name');
+        $cafe->address = $request->input('address');
+        $cafe->city = $request->input('city');
+        $cafe->state = $request->input('state');
+        $cafe->zip = $request->input('zip');
         $cafe->latitude = 0;
         $cafe->longtitude = 0;
 
