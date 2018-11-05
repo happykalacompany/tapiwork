@@ -56271,7 +56271,7 @@ if (false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(64)
+  __webpack_require__(83)
 }
 var normalizeComponent = __webpack_require__(3)
 /* script */
@@ -56316,51 +56316,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(65);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("9a3b3b7a", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-10b7d3a0\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NewCafe.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-10b7d3a0\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NewCafe.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(1)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 64 */,
+/* 65 */,
 /* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -56412,19 +56379,97 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             address: '',
             city: '',
             state: '',
-            zip: ''
+            zip: '',
+            validations: {
+                name: {
+                    is_valid: true,
+                    text: ''
+                },
+                address: {
+                    is_valid: true,
+                    text: ''
+                },
+                city: {
+                    is_valid: true,
+                    text: ''
+                },
+                state: {
+                    is_valid: true,
+                    text: ''
+                },
+                zip: {
+                    is_valid: true,
+                    text: ''
+                }
+            }
         };
     },
 
     methods: {
         submitNewCafe: function submitNewCafe() {
-            this.$store.dispatch('addCafe', {
-                name: this.name,
-                address: this.address,
-                city: this.city,
-                state: this.state,
-                zip: this.zip
-            });
+            if (this.validateNewCafe()) {
+                this.$store.dispatch('addCafe', {
+                    name: this.name,
+                    address: this.address,
+                    city: this.city,
+                    state: this.state,
+                    zip: this.zip
+                });
+            }
+        },
+        validateNewCafe: function validateNewCafe() {
+            var validNewCafeForm = true;
+
+            //检测名字
+            if (this.name.trim() === '') {
+                validNewCafeForm = false;
+                this.validations.name.is_valid = false;
+                this.validations.name.text = '请输入咖啡厅的名字';
+            } else {
+                this.validations.name.is_valid = true;
+                this.validations.name.text = '';
+            }
+
+            //检测地址
+            if (this.address.trim() === '') {
+                validNewCafeForm = false;
+                this.validations.address.is_valid = false;
+                this.validations.address.text = '请输入咖啡厅的地址';
+            } else {
+                this.validations.address.is_valid = true;
+                this.validations.address.text = '';
+            }
+
+            //检测城市
+            if (this.city.trim() === '') {
+                validNewCafeForm = false;
+                this.validations.city.is_valid = false;
+                this.validations.city.text = '请输入咖啡厅所在的城市';
+            } else {
+                this.validations.city.is_valid = true;
+                this.validations.text = '';
+            }
+
+            //检测省份
+            if (this.state.trim() === '') {
+                validNewCafeForm = false;
+                this.validations.state.is_valid = false;
+                this.validations.state.text = '请输入咖啡厅所在的省份';
+            } else {
+                this.validations.state.is_valid - true;
+                this.validations.state.text = '';
+            }
+
+            //检测邮政编码,除了检测为空还需要检测zip的长度为6为数字
+            if (this.zip.trim() === '' || this.zip.match(/(^\d{6}$)/)) {
+                validNewCafeForm = false;
+                this.validations.zip.is_valid = false;
+                this.validations.zip.text = '请输入合法的邮政编码';
+            } else {
+                this.validations.zip.is_valid = true;
+                this.validations.zip.text = '';
+            }
+            return validNewCafeForm;
         }
     }
 });
@@ -56464,7 +56509,23 @@ var render = function() {
                   }
                 }
               })
-            ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.validations.name.is_valid,
+                    expression: "!validations.name.is_valid"
+                  }
+                ],
+                staticClass: "validation"
+              },
+              [_vm._v(_vm._s(_vm.validations.name.text))]
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "large-12 medium-12 small-12 cell" }, [
@@ -56490,7 +56551,23 @@ var render = function() {
                   }
                 }
               })
-            ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.validations.address.is_valid,
+                    expression: "!validations.address.is_valid"
+                  }
+                ],
+                staticClass: "validation"
+              },
+              [_vm._v(_vm._s(_vm.validations.address.text))]
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "large-12 medium-12 small-12 cell" }, [
@@ -56516,7 +56593,23 @@ var render = function() {
                   }
                 }
               })
-            ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.validations.city.is_valid,
+                    expression: "!validations.city.is_valid"
+                  }
+                ],
+                staticClass: "validation"
+              },
+              [_vm._v(_vm._s(_vm.validations.city.text))]
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "large-12 medium-12 small-12 cell" }, [
@@ -56542,7 +56635,23 @@ var render = function() {
                   }
                 }
               })
-            ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.validations.state.is_valid,
+                    expression: "!validations.state.is_valid"
+                  }
+                ],
+                staticClass: "validation"
+              },
+              [_vm._v(_vm._s(_vm.validations.state.text))]
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "large-12 medium-12 small-12 cell" }, [
@@ -56568,7 +56677,23 @@ var render = function() {
                   }
                 }
               })
-            ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.validations.zip.is_valid,
+                    expression: "!validations.zip.is_valid"
+                  }
+                ],
+                staticClass: "validation"
+              },
+              [_vm._v(_vm._s(_vm.validations.zip.text))]
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "large-12 medium-12 small-12 cell" }, [
@@ -59059,6 +59184,49 @@ var TAPIWORK_CONFIG = {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(84);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("5aca5552", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-10b7d3a0\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js?indentedSyntax!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NewCafe.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-10b7d3a0\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js?indentedSyntax!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NewCafe.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

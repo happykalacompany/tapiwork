@@ -51,8 +51,4 @@ class CafesController extends Controller{
 
         return response()->json($cafe, 201);
     }
-
-    public function hello(){
-        echo 'hello worle';exit;
-    }
 }

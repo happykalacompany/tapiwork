@@ -5,6 +5,11 @@
         https://sass-guidelin.es/#the-7-1-pattern
    ========================================================================== */
 
+span.validation {
+  color: red;
+  display: block;
+}
+
 /**
  * Foundation for Sites by ZURB
  * Version 6.5.0
