@@ -40,4 +40,12 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
      * Description: add new cafe
      */
     Route::post('/cafes', 'API\CafesController@postNewCafe');
+
+    /**
+     * Url: /api/v1/brew_method
+     * Controller: API\BrewMethodsController@getBrewMethods
+     * Method: get
+     * Description: get all BrewMethod with the count of cafe
+     */
+    Route::get('/brew_method','API\BrewMethodsController@getBrewMethods');
 });

@@ -19,7 +19,7 @@ class CafesController extends Controller{
      * description: get all cafes in the application
      */
     public function getCafes(){
-        $cafes = Cafe::all();
+        $cafes = Cafes::with('brewMethods')->get();
         return response()->json($cafes);
     }
 
@@ -29,7 +29,7 @@ class CafesController extends Controller{
      * description: get a cafe detail
      */
     public function getCafe($id){
-        $cafe = Cafe::where('id','=',$id)->first();
+        $cafe = Cafe::where('id','=',$id)->with('brewMethods')->first();
         return response()->json($cafe);
     }
 
