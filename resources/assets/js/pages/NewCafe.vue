@@ -130,12 +130,12 @@ export default {
                 this.validations.state.is_valid = false;
                 this.validations.state.text = '请输入咖啡厅所在的省份';
             }else{
-                this.validations.state.is_valid - true;
+                this.validations.state.is_valid = true;
                 this.validations.state.text = '';
             }
 
             //检测邮政编码,除了检测为空还需要检测zip的长度为6为数字
-            if(this.zip.trim() === '' || this.zip.match(/(^\d{6}$)/) ){
+            if(this.zip.trim() === ''){
                 validNewCafeForm = false;
                 this.validations.zip.is_valid = false;
                 this.validations.zip.text = '请输入合法的邮政编码';

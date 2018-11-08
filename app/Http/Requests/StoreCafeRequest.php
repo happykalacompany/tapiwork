@@ -28,7 +28,7 @@ class StoreCafeRequest extends FormRequest
             'address' => 'required',
             'city' => 'required',
             'state' => 'required',
-            'zip' => 'required|regex:/\b\d{6}\b/'
+            'zip' => 'required'
         ];
     }
 
@@ -45,8 +45,7 @@ class StoreCafeRequest extends FormRequest
             'address.required' => '咖啡店地址不能为空',
             'city.required' => '咖啡店城市不能为空',
             'state.required' => '咖啡店省份不能为空',
-            'zip.required' => '咖啡店的邮政编码不能为空',
-            'zip.regex' => '邮政编码非法'
+            'zip.required' => '咖啡店的邮政编码不能为空'
         ];
     }
 }
