@@ -19,7 +19,7 @@ class CafesController extends Controller{
      * description: get all cafes in the application
      */
     public function getCafes(){
-        $cafes = Cafes::with('brewMethods')->get();
+        $cafes = Cafe::with('brewMethods')->get();
         return response()->json($cafes);
     }
 

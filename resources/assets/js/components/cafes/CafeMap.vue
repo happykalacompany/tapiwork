@@ -75,7 +75,7 @@ export default {
                 });
                 //创建一个新的信息窗体
                 var infoWindow = new AMap.InfoWindow({
-                    content:this.cafes[i-1].name
+                    content:this.cafes[i].name
                 });
                 this.InfoWindows.push(infoWindow);
                 //将窗体和标记点的点击事件绑定起来

@@ -42,10 +42,10 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
     Route::post('/cafes', 'API\CafesController@postNewCafe');
 
     /**
-     * Url: /api/v1/brew_method
+     * Url: /api/v1/brew_methods
      * Controller: API\BrewMethodsController@getBrewMethods
      * Method: get
      * Description: get all BrewMethod with the count of cafe
      */
-    Route::get('/brew_method','API\BrewMethodsController@getBrewMethods');
+    Route::get('/brew_methods','API\BrewMethodsController@getBrewMethods');
 });
