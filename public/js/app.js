@@ -56786,44 +56786,54 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.validations.name.text = '';
             }
 
-            //检测地址
-            if (this.address.trim() === '') {
+            //验证网址
+            if (this.website.trim() === '') {
                 validNewCafeForm = false;
-                this.validations.address.is_valid = false;
-                this.validations.address.text = '请输入咖啡厅的地址';
+                this.validations.website.is_valid = false;
+                this.validations.website.text = '请输入网址';
             } else {
-                this.validations.address.is_valid = true;
-                this.validations.address.text = '';
+                this.validations.website.is_valid = true;
+                this.validations.website.text = '';
             }
 
-            //检测城市
-            if (this.city.trim() === '') {
-                validNewCafeForm = false;
-                this.validations.city.is_valid = false;
-                this.validations.city.text = '请输入咖啡厅所在的城市';
-            } else {
-                this.validations.city.is_valid = true;
-                this.validations.text = '';
-            }
+            for (var index in this.locations) {
+                //检测详细地址
+                if (this.locations.hasOwnproperty(index)) {
+                    if (this.locations[index].address.trim() === '') {
+                        validNewCafeForm = false;
+                        this.validations.locations[index].address.is_valid = false;
+                        this.validations.locations[index].address.text = '请输入咖啡厅的地址';
+                    } else {
+                        this.validations.locations[index].address.is_valid = true;
+                        this.validations.locations[index].address.text = '';
+                    }
+                }
+                //检测城市
+                if (this.locations[index].city.trim() === '') {
+                    this.validations.locations[index].city.is_valid = false;
+                    this.validations.locations[index].city.text = '请输入咖啡厅所在的城市';
+                } else {
+                    this.validations.locations[index].city.is_valid = true;
+                    this.validations.locations[index].city.text = '';
+                }
 
-            //检测省份
-            if (this.state.trim() === '') {
-                validNewCafeForm = false;
-                this.validations.state.is_valid = false;
-                this.validations.state.text = '请输入咖啡厅所在的省份';
-            } else {
-                this.validations.state.is_valid = true;
-                this.validations.state.text = '';
-            }
+                //检测省份
+                if (this.locations[index].state.trim() === '') {
+                    this.validations.locations[index].state.is_valid = false;
+                    this.validations.locations[index].state.text = '请输入咖啡厅所在的省份';
+                } else {
+                    this.validations.locations[index].state.is_valid = true;
+                    this.validations.locations[index].state.text = '';
+                }
 
-            //检测邮政编码,除了检测为空还需要检测zip的长度为6为数字
-            if (this.zip.trim() === '') {
-                validNewCafeForm = false;
-                this.validations.zip.is_valid = false;
-                this.validations.zip.text = '请输入合法的邮政编码';
-            } else {
-                this.validations.zip.is_valid = true;
-                this.validations.zip.text = '';
+                //检测邮政编码
+                if (this.locations[index].zip.trim() === '') {
+                    this.validations.locations[index].zip.is_valid = false;
+                    this.validations.locations[index].zip.text = '请输入咖啡厅所在地的邮政编码';
+                } else {
+                    this.validations.locations[index].zip.is_valid = true;
+                    this.validations.locations[index].zip.text = '';
+                }
             }
             return validNewCafeForm;
         },
