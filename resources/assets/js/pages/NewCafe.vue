@@ -8,39 +8,78 @@
             <div class="grid-container">
                 <div class="grid-x grid-padding-x">
                     <div class="large-12 medium-12 small-12 cell">
-                        <label>Name
+                        <label>名称
                             <input type="text" placeholder="咖啡店名" v-model="name">
                         </label>
                         <span class="validation" v-show="!validations.name.is_valid">{{ validations.name.text }}</span>
                     </div>
                     <div class="large-12 medium-12 small-12 cell">
-                        <label>Address
-                            <input type="text" placeholder="地址" v-model="address">
+                        <label>网址
+                            <input type="text" placeholder="网址" v-model="website">
                         </label>
-                        <span class="validation" v-show="!validations.address.is_valid">{{ validations.address.text }}</span>
+                        <span class="validation" v-show="!validations.website.is_valid">{{ validations.website.text }}</span>
                     </div>
                     <div class="large-12 medium-12 small-12 cell">
-                        <label>City
-                            <input type="text" placeholder="城市" v-model="city">
+                        <label>简介
+                            <input type="text" placeholder="简介" v-model="description">
                         </label>
-                        <span class="validation" v-show="!validations.city.is_valid">{{ validations.city.text }}</span>
-                    </div>
-                    <div class="large-12 medium-12 small-12 cell">
-                        <label>State
-                            <input type="text" placeholder="省份" v-model="state">
-                        </label>
-                        <span class="validation" v-show="!validations.state.is_valid">{{ validations.state.text }}</span>
-                    </div>
-                    <div class="large-12 medium-12 small-12 cell">
-                        <label>Zip
-                            <input type="text" placeholder="邮编" v-model="zip">
-                        </label>
-                        <span class="validation" v-show="!validations.zip.is_valid">{{ validations.zip.text }}</span>
-                    </div>
-                    <div class="large-12 medium-12 small-12 cell">
-                        <a class="button" v-on:click="submitNewCafe()">提交</a>
                     </div>
                 </div>
+
+                <div class="grid-x grid-padding-x" v-for="(location, key) in locations">
+                    <div class="large-12 medium-12 small-12 cell">
+                        <h5>位置</h5>
+                    </div>
+                    <div class="large-6 medium-6 small-12 cell">
+                        <label>位置名称
+                            <input type="text" placeholder="位置名称" v-model="locations[key].name">
+                        </label>
+                    </div>
+                    <div class="large-6 medium-6 small-12 cell">
+                        <label>详细地址
+                            <input type="text" placeholder="详细地址" v-model="locations[key].address">
+                        </label>
+                        <span class="validation" v-show="!validations.locations[key].address.is_valid">{{ validations.locations[key].address.text }}</span>
+                    </div>
+                    <div class="large-6 medium-6 small-12 cell">
+                        <label>城市
+                            <input type="text" placeholder="城市" v-model="locations[key].city">
+                        </label>
+                        <span class="validation" v-show="!validations.locations[key].city.is_valid">{{ validations.locations[key].city.text }}</span>
+                    </div>
+                    <div class="large-6 medium-6 small-12 cell">
+                        <label>省份
+                            <input type="text" placeholder="省份" v-model="locations[key].state">
+                        </label>
+                        <span class="validation" v-show="!validations.locations[key].state.is_valid">{{ validations.locations[key].state.text }}</span>
+                    </div>
+                    <div class="large-6 medium-6 small-12 cell">
+                        <label>邮政编码
+                            <input type="text" placeholder="邮政编码" v-model="locations[key].zip">
+                        </label>
+                        <span class="validation" v-show="!validations.locations[key].zip.is_valid">{{ validations.locations[key].zip.text }}</span>
+                    </div>
+                    <div class="large-12 medium-12 small-12 cell">
+                        <label>冲调方法</label>
+                        <span class="brewMethod" v-for="brewMethod in brewMethods">
+                            <input type="checkbox" v-bind:id="'brew-method-'+brewMethod.id+'-'+key" v-bind:value="brewMethod.id" v-model="locations[key].methodsAvailable">
+                            <label v-bind:for="'brew-method-'+brewMethod.id+'-'+key">{{ brewMethod.method }}</label>
+                        </span>
+                    </div>
+                    <div class="large-12 medium-12 small-12 cell">
+                        <a class="button" v-on:click="removeLocation(key)">移除位置</a>
+                    </div>
+                </div>
+
+                <div class="grid-x grid-padding-x">
+                    <div class="large-2 medium-2 small-2 cell">
+                        <a class="button" v-on:click="addLocation()">新增位置</a>
+                    </div>
+                    <div class="large-1 medium-1 small-1 cell">
+                        <a class="button" v-on:click="submitNewCafe()">提交</a>
+                    </div>
+
+                </div>    
             </div>
         </form>
     </div>    
@@ -51,35 +90,29 @@ export default {
     data(){
         return {
             name:'',
-            address:'',
-            city:'',
-            state:'',
-            zip:'',
+            locations:[],
+            website:'',
+            description:'',
+            roaster:false,
             validations:{
                 name:{
                     is_valid:true,
                     text:''
                 },
-                address:{
+                locations:[],
+                oneLocation:{
                     is_valid:true,
                     text:''
                 },
-                city:{
-                    is_valid:true,
-                    text:''
-                },
-                state:{
-                    is_valid:true,
-                    text:''
-                },
-                zip:{
-                    is_valid:true,
+                website:{
+                    is_valid:false,
                     text:''
                 }
             }
         }
     },
     methods:{
+        //数据提交方法
         submitNewCafe:function(){
             if(this.validateNewCafe()){
                 this.$store.dispatch('addCafe',{
@@ -91,6 +124,7 @@ export default {
                 });
             }
         },
+        //数据验证方法
         validateNewCafe:function(){
             let validNewCafeForm = true;
 
@@ -144,6 +178,42 @@ export default {
                 this.validations.zip.text = '';
             }
             return validNewCafeForm;
+        },
+        //添加咖啡店的位置,在表单中添加位置和位置对应的验证
+        addLocation(){
+             this.locations.push({name: '', address: '', city: '', state: '', zip: '', methodsAvailable: []});
+            this.validations.locations.push({
+                address:{
+                    is_valid:true,
+                    text:''
+                },
+                city:{
+                    is_valid:true,
+                    text:''
+                },
+                state:{
+                    is_valid:true,
+                    text:''
+                },
+                zip:{
+                    is_valid:true,
+                    text:''
+                }
+            })
+        },
+        removeLocation(key){
+            this.locations.splice(key,1);
+            this.validations.locations.splice(key,1);
+        }
+    },
+    created(){
+        //在组件创建之后调用addLocation方法设置一个初始位置
+        this.addLocation();
+    },
+    computed:{
+        //计算属性获取可以使用的冲调方法
+        brewMethods(){
+            return this.$store.getters.getBrewMethods;
         }
     }
 }
