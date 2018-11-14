@@ -56461,12 +56461,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 //创建一个点标记
                 var marker = new AMap.Marker({
                     position: new AMap.LngLat(parseFloat(this.cafes[i].latitude), parseFloat(this.cafes[i].longtitude)),
-                    title: this.cafes[i].name,
+                    title: this.cafes[i].location_name,
                     icon: icon
                 });
                 //创建一个新的信息窗体
                 var infoWindow = new AMap.InfoWindow({
-                    content: this.cafes[i].name
+                    content: this.cafes[i].location_name
                 });
                 this.InfoWindows.push(infoWindow);
                 //将窗体和标记点的点击事件绑定起来
@@ -56765,10 +56765,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.validateNewCafe()) {
                 this.$store.dispatch('addCafe', {
                     name: this.name,
-                    address: this.address,
-                    city: this.city,
-                    state: this.state,
-                    zip: this.zip
+                    locations: this.locations,
+                    website: this.website,
+                    description: this.description,
+                    roaster: this.roaster
                 });
             }
         },
@@ -56798,16 +56798,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             for (var index in this.locations) {
                 //检测详细地址
-                if (this.locations.hasOwnproperty(index)) {
-                    if (this.locations[index].address.trim() === '') {
-                        validNewCafeForm = false;
-                        this.validations.locations[index].address.is_valid = false;
-                        this.validations.locations[index].address.text = '请输入咖啡厅的地址';
-                    } else {
-                        this.validations.locations[index].address.is_valid = true;
-                        this.validations.locations[index].address.text = '';
-                    }
+                // if(this.locations.hasOwnproperty(index)){
+                if (this.locations[index].address.trim() === '') {
+                    validNewCafeForm = false;
+                    this.validations.locations[index].address.is_valid = false;
+                    this.validations.locations[index].address.text = '请输入咖啡厅的地址';
+                } else {
+                    this.validations.locations[index].address.is_valid = true;
+                    this.validations.locations[index].address.text = '';
                 }
+                // }
                 //检测城市
                 if (this.locations[index].city.trim() === '') {
                     this.validations.locations[index].city.is_valid = false;
@@ -56859,9 +56859,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             });
         },
+
+        //移除一个分店表单
         removeLocation: function removeLocation(key) {
             this.locations.splice(key, 1);
             this.validations.locations.splice(key, 1);
+        },
+
+        //重置清理form表单
+        clearForm: function clearForm() {
+            this.name = '';
+            this.locations = [];
+            this.website = '';
+            this.roaster = false;
+            this.description = '';
+            this.validations = {
+                name: {
+                    is_valid: true,
+                    text: ''
+                },
+                locations: [],
+                oneLocation: {
+                    is_valid: true,
+                    text: ''
+                },
+                website: {
+                    is_valid: true,
+                    text: ''
+                }
+            };
+            this.addLocation();
         }
     },
     created: function created() {
@@ -56873,6 +56900,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         //计算属性获取可以使用的冲调方法
         brewMethods: function brewMethods() {
             return this.$store.getters.getBrewMethods;
+        },
+        addCafeStatus: function addCafeStatus() {
+            return this.$store.getters.getCafeAddStatus;
+        }
+    },
+    watch: {
+        'addCafeStatus': function addCafeStatus() {
+            if (this.addCafeStatus === 2) {
+                //添加成功
+                this.clearForm();
+                console.log('添加成功');
+                // $('#cafe-added-successfully').show().delay(5000).fadeOut();   
+            } else if (this.addCafeStatus === 3) {
+                //添加失败
+                // $('#cafe-added-unsuccessfully').show().delay(5000).fadeOut();
+                console.log('添加失败');
+            }
         }
     }
 });
@@ -59720,7 +59764,7 @@ var cafes = {
 
             //状态1标识新增开始
             commit('setCafeAddStatus', 1);
-            __WEBPACK_IMPORTED_MODULE_0__api_cafe_js__["a" /* default */].postAddNewCafe(data.name, data.address, data.city, data.state, data.zip).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0__api_cafe_js__["a" /* default */].postAddNewCafe(data.name, data.locations, data.website, data.description, data.roaster).then(function (response) {
                 commit('setCafeAddStatus', 2);
                 dispatch('loadCafes');
             }).catch(function () {
@@ -59794,13 +59838,13 @@ var cafes = {
      * 新增一个cafe店
      * post /api/v1/cafes
      */
-    postAddNewCafe: function postAddNewCafe(name, address, city, state, zip) {
+    postAddNewCafe: function postAddNewCafe(name, locations, website, description, roaster) {
         return __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* TAPIWORK_CONFIG */].API_URL + '/cafes', {
             name: name,
-            address: address,
-            city: city,
-            state: state,
-            zip: zip
+            locations: locations,
+            website: website,
+            description: description,
+            roaster: roaster
         });
     }
 });

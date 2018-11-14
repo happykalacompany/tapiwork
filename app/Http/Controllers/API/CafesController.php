@@ -39,16 +39,59 @@ class CafesController extends Controller{
      * description: add new cafe
      */
     public function postNewCafe(StoreCafeRequest $request){
-        $cafe = new Cafe();
-        $cafe->name = $request->input('name');
-        $cafe->address = $request->input('address');
-        $cafe->city = $request->input('city');
-        $cafe->state = $request->input('state');
-        $cafe->zip = $request->input('zip');
-        $arrLocation = GaodeMaps::geocodeAddress($cafe->address, $cafe->city, $cafe->state);
-        $cafe->latitude = $arrLocation['latitude'];
-        $cafe->longtitude = $arrLocation['longtitude'];
-        $cafe->save();
-        return response()->json($cafe, 201);
+
+        //已经添加的咖啡店的数据
+        $addedCafes = [];
+
+        //存储咖啡店的总店位置
+        $parentCafe = new Cafe();
+        $parentCafe->name = $request->input('name');
+        //获取所有的咖啡店的位置信息
+        $locations = $request->input('locations');
+        $parentCafe->location_name = $locations[0]['name']?:'';
+        $parentCafe->address = $locations[0]['address']?:'';
+        $parentCafe->city = $locations[0]['city']?:'';
+        $parentCafe->state = $locations[0]['state']?:'';
+        $parentCafe->zip = $locations[0]['zip']?:'';
+        $arrLocation = GaodeMaps::geocodeAddress($parentCafe->address, $parentCafe->city, $parentCafe->state);
+        $parentCafe->latitude = $arrLocation['latitude'];
+        $parentCafe->longtitude = $arrLocation['longtitude'];
+        $parentCafe->roaster = $request->input('roaster')?1:0;
+        $parentCafe->website = $request->input('website');
+        $parentCafe->description = $request->input('description');
+        $parentCafe->added_by = $request->user()->id;
+        $parentCafe->parent = 0;
+        $parentCafe->save();
+
+        //获取总点的冲泡方法并和总店数据关联
+        $brewMethods = $locations[0]['methodsAvailable'];
+        $parentCafe->brewMethods()->sync($brewMethods);
+        array_push($addedCafes,$parentCafe->toArray());
+
+        //存储分店的上传信息,locations长度大于1的情况下说明存在分点
+        if(count($locations) > 1){
+            for($i=1;$i<count($locations);$i++){
+                //分店与总店公用的信息有名称，网址，描述
+                $cafe = new Cafe();
+                $cafe->parent = $parentCafe->id;
+                $cafe->name = $request->input('name');
+                $cafe->location_name = $locations[$i]['name']?:'';
+                $cafe->address = $locations[$i]['address'];
+                $cafe->city = $locations[$i]['city'];
+                $cafe->state = $locations[$i]['state'];
+                $cafe->zip = $locations[$i]['zip'];
+                $coordinates = GaodeMaps::geocodeAddress($cafe->address,$cafe->city,$cafe->state);
+                $cafe->latitude = $coordinates['latitude'];
+                $cafe->longtitude = $coordinates['longtitude'];
+                $cafe->roaster = $request->input('roaster')?1:0;
+                $cafe->website = $request->input('website');
+                $cafe->description = $request->input('description');
+                $cafe->added_by = $request->user()->id;
+                $cafe->save();
+                $cafe->brewMethods()->sync($locations[$i]['methodsAvailable']);
+                array_push($addedCafes,$cafe->toArray());
+            }
+        }
+        return response()->json($addedCafes, 201);
     }
 }

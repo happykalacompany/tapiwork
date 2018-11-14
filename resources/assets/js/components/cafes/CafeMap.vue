@@ -70,12 +70,12 @@ export default {
                 //创建一个点标记
                 var marker = new AMap.Marker({
                     position: new AMap.LngLat(parseFloat(this.cafes[i].latitude), parseFloat(this.cafes[i].longtitude)),  
-                    title: this.cafes[i].name,
+                    title: this.cafes[i].location_name,
                     icon:icon
                 });
                 //创建一个新的信息窗体
                 var infoWindow = new AMap.InfoWindow({
-                    content:this.cafes[i].name
+                    content:this.cafes[i].location_name
                 });
                 this.InfoWindows.push(infoWindow);
                 //将窗体和标记点的点击事件绑定起来

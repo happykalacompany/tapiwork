@@ -117,10 +117,10 @@ export default {
             if(this.validateNewCafe()){
                 this.$store.dispatch('addCafe',{
                     name:this.name,
-                    address:this.address,
-                    city:this.city,
-                    state:this.state,
-                    zip:this.zip
+                    locations:this.locations,
+                    website:this.website,
+                    description:this.description,
+                    roaster:this.roaster
                 });
             }
         },
@@ -150,7 +150,7 @@ export default {
 
             for(var index in this.locations){
                 //检测详细地址
-                if(this.locations.hasOwnproperty(index)){
+                // if(this.locations.hasOwnproperty(index)){
                     if(this.locations[index].address.trim() === ''){
                         validNewCafeForm = false;
                         this.validations.locations[index].address.is_valid = false;
@@ -159,7 +159,7 @@ export default {
                         this.validations.locations[index].address.is_valid = true;
                         this.validations.locations[index].address.text = '';
                     }
-                }
+                // }
                 //检测城市
                 if(this.locations[index].city.trim() === ''){
                     this.validations.locations[index].city.is_valid = false;
@@ -211,9 +211,34 @@ export default {
                 }
             })
         },
+        //移除一个分店表单
         removeLocation(key){
             this.locations.splice(key,1);
             this.validations.locations.splice(key,1);
+        },
+        //重置清理form表单
+        clearForm(){
+            this.name = '';
+            this.locations = [];
+            this.website = '';
+            this.roaster = false;
+            this.description = '';
+            this.validations = {
+                name:{
+                    is_valid:true,
+                    text:''
+                },
+                locations:[],
+                oneLocation:{
+                    is_valid:true,
+                    text:''
+                },
+                website:{
+                    is_valid:true,
+                    text:''
+                }
+            };
+            this.addLocation();
         }
     },
     created(){
@@ -224,7 +249,24 @@ export default {
         //计算属性获取可以使用的冲调方法
         brewMethods(){
             return this.$store.getters.getBrewMethods;
+        },
+        addCafeStatus(){
+            return this.$store.getters.getCafeAddStatus;
+        }
+    },
+    watch:{
+        'addCafeStatus':function(){
+            if(this.addCafeStatus === 2){
+                //添加成功
+                this.clearForm();
+                console.log('添加成功');
+                // $('#cafe-added-successfully').show().delay(5000).fadeOut();   
+            }else if(this.addCafeStatus === 3){
+                //添加失败
+                // $('#cafe-added-unsuccessfully').show().delay(5000).fadeOut();
+                console.log('添加失败');
+            }
         }
     }
 }
-</script>
+</script>    

@@ -20,13 +20,13 @@ export default{
      * 新增一个cafe店
      * post /api/v1/cafes
      */
-    postAddNewCafe: function(name,address,city,state,zip){
+    postAddNewCafe: function(name,locations,website,description,roaster){
         return Axios.post(TAPIWORK_CONFIG.API_URL+ '/cafes',{
             name:name,
-            address:address,
-            city:city,
-            state:state,
-            zip:zip
+            locations:locations,
+            website:website,
+            description:description,
+            roaster:roaster
         })
     }
 }
