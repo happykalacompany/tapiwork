@@ -28,5 +28,20 @@ export default{
             description:description,
             roaster:roaster
         })
+    },
+    /**
+     * 关注咖啡店
+     * post /api/v1/cafes/{cafeID}/like
+     */
+    postLikeCafe:function(cafeID){
+        return Axios.post(TAPIWORK_CONFIG.API_URL+'/cafes/'+cafeID+'/like');
+    },
+    /**
+     * 取消关注咖啡店
+     * delete /api/v1/cafes/{cafeID}/like
+     */
+    deleteLikeCafe:function(cafeID){
+        return Axios.delete(TAPIWORK_CONFIG.API_URL+'/cafes/'+cafeID+'/like')
     }
+
 }

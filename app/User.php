@@ -27,4 +27,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * @abstract 定义用户对咖啡店的喜爱关注关系
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function likes(){
+        return $this->belongsToMany(User::class,'users_cafes_likes','cafe_id','user_id');
+    }
 }

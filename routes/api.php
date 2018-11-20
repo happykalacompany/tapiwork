@@ -48,4 +48,20 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
      * Description: get all BrewMethod with the count of cafe
      */
     Route::get('/brew_methods','API\BrewMethodsController@getBrewMethods');
+
+    /**
+     * Url: /api/v1/cafes/{id}/like
+     * Controller: API\CafesController@postLikeCafe
+     * Method: post
+     * Description: post cafe like data
+     */
+    Route::post('/cafes/{id}/like','API\CafesController@postLikeCafe');
+
+    /**
+     * Url: /api/v1/cafes/{id}/like
+     * Controller: API\CafesController@deleteLikeCafe
+     * Method: delete
+     * Description: delete cafe like data
+     */
+    Route::delete('/cafes/{id}/like','API\CafesController@deleteLikeCafe');
 });

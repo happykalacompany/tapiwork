@@ -4,9 +4,12 @@ namespace app\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Cafe;
 use App\Utilities\GaodeMaps;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\StoreCafeRequest;
+use Illuminate\Support\Facades\Auth;
+
 /**
  * @abstract 咖啡店的操作控制器类
  * 
@@ -29,7 +32,7 @@ class CafesController extends Controller{
      * description: get a cafe detail
      */
     public function getCafe($id){
-        $cafe = Cafe::where('id','=',$id)->with('brewMethods')->first();
+        $cafe = Cafe::where('id','=',$id)->with('brewMethods')->with('userLike')->first();
         return response()->json($cafe);
     }
 
@@ -94,4 +97,34 @@ class CafesController extends Controller{
         }
         return response()->json($addedCafes, 201);
     }
+
+    /**
+     * url:/api/v1/cafes/{id}/like
+     * method:post
+     * description: save cafe like data
+     */
+    public function postLikeCafe($cafeID){
+        $cafe = Cafe::where('id','=',$cafeID)->first();
+        $cafe->likes()->attach(Auth::user()->id,
+            [
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
+        );
+        return response()->json(['cafe_liked' => true],201);
+    }
+
+    /**
+     * url:/api/v1/cafes/{id}/like
+     * method:delete
+     * description:delete cafe like data
+     */
+    public function deleteLikeCafe($cafeID){
+        $cafe = Cafe::where('id','=',$cafeID)->first();
+        $cafe->likes()->detach(Auth::user()->id);
+        return response()->json(null,204);
+    }
+
+
+
 }

@@ -18,3 +18,5 @@ Route::get('/login','Web\AuthenticationController@getLogin')->name('login')->mid
 Route::get('/auth/{social}','Web\AuthenticationController@getSocialRedirect')->middleware('guest');
 //跳转第三方用户验证的回调路由
 Route::get('/auth/{social}/callback','Web\AuthenticationController@getSocialCallback')->middleware('guest');
+
+Route::get('/test/{id}','API\CafesController@getCafe');

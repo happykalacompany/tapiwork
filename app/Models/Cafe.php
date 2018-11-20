@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Cafe extends Model
@@ -12,6 +12,13 @@ class Cafe extends Model
      */
     public function brewMethods(){
         return $this->belongsToMany(BrewMethod::class, 'cafes_brew_methods', 'cafe_id', 'brew_method_id');
+    }
+    /**
+     * @abstract 定义用户对咖啡店的喜爱和关注关系
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function likes(){
+        return $this->belongsToMany(Cafe::class,'users_cafes_likes','cafe_id','user_id');
     }
 
     //关于自身数据的关联
@@ -30,5 +37,13 @@ class Cafe extends Model
      */
     public function parent(){
         return $this->hasOne(Cafe::class,'id','parent');
+    }
+
+    /**
+     * @abstract 获取当前登录用户和当前咖啡店之间的关注关系
+     * @return $this
+     */
+    public function userLike(){
+        return $this->belongsToMany(User::class, 'users_cafes_likes', 'cafe_id', 'user_id')->where('user_id', auth()->id());
     }
 }
