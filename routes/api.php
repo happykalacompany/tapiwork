@@ -82,4 +82,12 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
      */
     Route::delete('/cafe/{id}/tags/{tagId}','API\CafesController@deleteCafeTags');
 
+    /**
+     * Url:/api/v1/tags
+     * Controller:API\CafesController@deleteCafeTags
+     * Method:delete
+     * Description:delete cafe tag
+     */
+    Route::get('/tags','API\TagsController@getTags');
+
 });

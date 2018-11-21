@@ -71,6 +71,9 @@ class CafesController extends Controller{
         //获取总点的冲泡方法并和总店数据关联
         $brewMethods = $locations[0]['methodsAvailable'];
         $parentCafe->brewMethods()->sync($brewMethods);
+        //获取总店的标签
+        $parentTags = $locations[0]['tags'];
+        Tagger::tagsCafe($request->user()->id,$parentTags,$parentCafe);
         array_push($addedCafes,$parentCafe->toArray());
 
         //存储分店的上传信息,locations长度大于1的情况下说明存在分点
@@ -94,6 +97,7 @@ class CafesController extends Controller{
                 $cafe->added_by = $request->user()->id;
                 $cafe->save();
                 $cafe->brewMethods()->sync($locations[$i]['methodsAvailable']);
+                Tagger::tagsCafe($request->user()->id,$locations[$i]['tags'],$cafe);
                 array_push($addedCafes,$cafe->toArray());
             }
         }
