@@ -4,11 +4,13 @@ namespace app\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Cafe;
 use App\Utilities\GaodeMaps;
+use App\Utilities\Tagger;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\StoreCafeRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @abstract 咖啡店的操作控制器类
@@ -125,6 +127,31 @@ class CafesController extends Controller{
         return response()->json(null,204);
     }
 
+    /**
+     * url:/api/v1/cafe/{id}/tags
+     * method:post
+     * description:add cafe tags
+     */
+    public function postAddTags(Request $request,$cafe_id){
+        //获取请求从传递的标签数据
+        $tags = $request->input('tags');
+        $cafe = Cafe::find($cafe_id);
+        //处理标签和咖啡店之间的关联
+        Tagger::tagsCafe(Auth::user()->id,$tags,$cafe);
+        //获取标签关联之后的cafe点数据
+        $cafe = Cafe::where('id','=',$cafe_id)->with('brewMethods')->with('userLike')->with('Tags')->first();
+        return response()->json($cafe,201);
+    }
 
 
+    /**
+     * url:/api/v1/cafe/{id}/tags/{tagId}
+     * method:delete
+     * description:delete cafe tags
+     */
+    public function deleteCafeTags($cafeid,$tagid){
+        DB::table('cafes_users_tags')->where('cafe_id','=',$cafeid)->where('tag_id','=',$tagid)
+            ->where('user_id',Auth::user()->id)->delete();
+        return response()->json('null',204);
+    }
 }

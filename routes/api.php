@@ -64,4 +64,22 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
      * Description: delete cafe like data
      */
     Route::delete('/cafes/{id}/like','API\CafesController@deleteLikeCafe');
+
+
+    /**
+     * Url:/api/v1/cafe/{id}/tags
+     * Controller:API\CafesController@postAddTags
+     * Method:Post
+     * Desxription:add cafe tags
+     */
+    Route::post('/cafe/{id}/tags','API\CafesController@postAddTags');
+
+    /**
+     * Url:/api/v1/cafe/{id}/tags/{tagId}
+     * Controller:API\CafesController@deleteCafeTags
+     * Method:delete
+     * Description:delete cafe tag
+     */
+    Route::delete('/cafe/{id}/tags/{tagId}','API\CafesController@deleteCafeTags');
+
 });

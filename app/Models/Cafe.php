@@ -46,4 +46,12 @@ class Cafe extends Model
     public function userLike(){
         return $this->belongsToMany(User::class, 'users_cafes_likes', 'cafe_id', 'user_id')->where('user_id', auth()->id());
     }
+
+    /**
+     * @abstract 标定咖啡店个某一个标签之间的关系
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function Tags(){
+        return $this->belongsToMany(Tag::class,'cafes_users_tags','cafe_id','tag_id');
+    }
 }
