@@ -5,14 +5,17 @@
         display: block;
         margin-top: 20px;
         text-decoration: underline;
-
-        &.like{
+    }
+    
+    span{
+        .like{
             cursor: pointer;
         }
-        &.unlike{
+        .unlike{
             cursor: pointer;
         }
     }
+
 </style>
 
 <template>

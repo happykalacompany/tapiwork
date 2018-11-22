@@ -34,7 +34,7 @@ class CafesController extends Controller{
      * description: get a cafe detail
      */
     public function getCafe($id){
-        $cafe = Cafe::where('id','=',$id)->with('brewMethods')->with('userLike')->first();
+        $cafe = Cafe::where('id','=',$id)->with('brewMethods')->with('userLike')->with('Tags')->first();
         return response()->json($cafe);
     }
 
@@ -53,6 +53,7 @@ class CafesController extends Controller{
         $parentCafe->name = $request->input('name');
         //获取所有的咖啡店的位置信息
         $locations = $request->input('locations');
+
         $parentCafe->location_name = $locations[0]['name']?:'';
         $parentCafe->address = $locations[0]['address']?:'';
         $parentCafe->city = $locations[0]['city']?:'';

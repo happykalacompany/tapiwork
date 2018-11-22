@@ -42,6 +42,20 @@
             }
         }
     }
+    div.tag-contrainer{
+        margin: auto;
+        margin-top: 30px;
+        max-width: 700px;
+        text-align: center;
+
+        span.tag{
+            color: $dark-color;
+            font-family: 'Times New Roman', Times, serif;
+            margin-right: 20px;
+            display: inline-block;
+            line-height: 20px;
+        }
+    }    
 </style>
 
 <template>
@@ -60,7 +74,13 @@
                                 <toggle-like></toggle-like>
                             </div>
                         </div>
-
+                        <div class="tag-contrainer">
+                            <div class="grid-x">
+                                <div class="large-12 medium-12 small-12 cell">
+                                    <span class="tag" v-for="tag in cafe.tags">#{{tag.name}}</span>
+                                </div>
+                            </div>
+                        </div>
                         <span class="address">
                             {{ cafe.address }}<br>
                             {{ cafe.city }},{{ cafe.state }}

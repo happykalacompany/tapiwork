@@ -15,11 +15,11 @@ class TagsController extends Controller
      */
     public function getTags(Request $request){
         //获取
-        $search = Request::get('search');
+        $search = $request->get('search');
         if($search == '' || $search == null){
             $tags = Tag::all();
         }else{
-            $tags = Tag::where('name','like',$search."%")->get();
+            $tags = Tag::where('name','LIKE',$search."%")->get();
         }
         return response()->json($tags,201);
     }
