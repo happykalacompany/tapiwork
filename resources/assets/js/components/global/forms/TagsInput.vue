@@ -5,7 +5,7 @@
         position: relative;
 
         div.tags-input {
-            display: block;
+            display: table;
             -webkit-box-sizing: border-box;
             box-sizing: border-box;
             width: 100%;
@@ -118,6 +118,7 @@
 <script>
 import {TAPIWORK_CONFIG} from '../../../config.js';
 import {EventBus} from '../../../event-bus.js';
+import _ from 'lodash';
 export default {
     props:['unique'],
     data(){
@@ -147,8 +148,8 @@ export default {
         }
     },
     methods:{
-        //搜索对应的标签数据
-        searchTags(){
+        //搜索对应的标签数据,引入防抖动函数，演示300ms之后才提交数据查询
+        searchTags:_.debounce(function(e){
             //当前输入标签长度大于2且是可搜索状态的时候
             if(this.currentTag.length > 0 && !this.pauseSearch){
                 axios.get(TAPIWORK_CONFIG.API_URL + '/tags',{
@@ -163,7 +164,7 @@ export default {
             if(this.currentTag.length == 0 && !this.pauseSearch){
                 this.tagsSearchResultsArray = [];
             }
-        },
+        },300),
         //清理标签中的不需要的空格和字符串
         cleanTagsName(tagName){
             var cleanTag = tagName.trim();
