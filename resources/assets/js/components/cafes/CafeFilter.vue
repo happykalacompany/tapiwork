@@ -105,7 +105,7 @@ export default {
                 tags:this.tags,
                 roaster:this.isRoaster,
                 brew_method:this.brewMethods
-            })
+            });
         }
     },
     watch:{

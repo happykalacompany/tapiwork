@@ -1,17 +1,39 @@
 <style lang="scss">
-   div#cafe-map{
-       width: 100%;
-       height: 400px;
+   div#cafe-map-container{
+       position: absolute;
+       top: 50px;
+       right: 0px;
+       left: 0px;
+       bottom: 50px;
+
+       div#cafe-map{
+           position: absolute;
+           top: 0px;
+           right: 0px;
+           left:0px;
+           bottom: 0px;
+       }
    }
 </style>
 <template>
-    <div id='cafe-map'>
+    <div id="cafe-map-container">
+        <div id='cafe-map'>
         
+        </div>
+        <cafe-map-filter></cafe-map-filter>
     </div>
 </template>
 <script>
 import { TAPIWORK_CONFIG } from '../../config.js';
+import CafeMapFilter from './CafeMapFilter.vue';
+import { EventBus } from '../../event-bus.js';
+import { CafeBrewMethodsFilter } from '../../mixins/filters/CafeBrewMethodsFilter.js';
+import { CafesIsRoasterFilter } from '../../mixins/filters/CafeIsRoasterFilter.js';
+import { CafeTextFilter } from '../../mixins/filters/CafeTextFilter.js';
 export default {
+    components:{
+        CafeMapFilter
+    },
     props:{
         'latitude':{
             type:Number,
@@ -32,6 +54,11 @@ export default {
             }
         }
     },
+    mixins:[
+        CafeTextFilter,
+        CafesIsRoasterFilter,
+        CafeBrewMethodsFilter
+    ],
     data(){
         return {
             //初始化地图上的标记点数组
@@ -47,6 +74,13 @@ export default {
         });
         this.clearMarkers();
         this.buildMarkers();
+
+        //监听筛选条件的变化显示隐藏现在的地图控制点
+        EventBus.$on('filters-updated',function(filters){
+            this.processFilterData(filters);
+        }.bind(this));
+
+
     },
     computed:{
         //计算属性获取到单一节点数据中的咖啡店的数据
@@ -71,7 +105,10 @@ export default {
                 var marker = new AMap.Marker({
                     position: new AMap.LngLat(parseFloat(this.cafes[i].latitude), parseFloat(this.cafes[i].longtitude)),  
                     title: this.cafes[i].location_name,
-                    icon:icon
+                    icon:icon,
+                    extData:{
+                        'cafe':this.cafes[i]
+                    }
                 });
                 //创建一个新的信息窗体
                 var infoWindow = new AMap.InfoWindow({
@@ -93,6 +130,48 @@ export default {
         clearMarkers(){
             for(var i=0;i<this.markers.length;i++){
                 this.markers[i].setMap(null);
+            }
+        },
+        processFilterData(filters){
+            //循环makers点做条件判断处理
+            for(var i=0;this.markers.length;i++){
+                var textPass = false;
+                var tagsPass = false;
+                var isRoasterPass = false;
+                var brewMethodsPass = false;
+                if(filters.text === '' 
+                    && filters.tags.length == 0 
+                    && filters.roaster === false
+                    && filters.brew_method.length == 0){
+                        //所有筛选条件都为空
+                        this.markers[i].setMap(this.map);
+                }else{
+                    console.log(this.markers[i].getExtData( ).cafe);
+                    //处理文字筛选
+                    if(filters.text !='' && this.processCafeTextFliter(this.markers[i].getExtData( ).cafe,filters.text)){
+                        textPass = true;
+                    }else if(filters.text == '' ){
+                        textPass = true;
+                    }
+                    //处理烘焙店筛选
+                    if(filters.roaster && this.processCafeIsRosterFilter(this.markers[i].getExtData( ).cafe)){
+                        isRoasterPass = true;
+                    }else if(!filters.roaster){
+                        isRoasterPass = true;
+                    }
+                    //筛选冲调方法筛选
+                    if(filters.brew_method.length > 0 && this.processCafeBrewMethodsFilter(this.markers[i].getExtData( ).cafe,filters.brew_method)){
+                        brewMethodsPass = true;
+                    }else if(filters.brew_method.length == 0){
+                        brewMethodsPass = true;
+                    }
+
+                    if(textPass && isRoasterPass && brewMethodsPass){
+                        this.markers[i].setMap(this.map);
+                    }else{
+                        this.markers[i].setMap(null);
+                    }
+                }
             }
         }
     },
