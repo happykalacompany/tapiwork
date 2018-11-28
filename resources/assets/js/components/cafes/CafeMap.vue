@@ -1,4 +1,5 @@
 <style lang="scss">
+    @import '~@/abstracts/_variables.scss';
    div#cafe-map-container{
        position: absolute;
        top: 50px;
@@ -13,6 +14,40 @@
            left:0px;
            bottom: 0px;
        }
+
+        div.cafe-info-window {
+            div.cafe-name {
+                display: block;
+                text-align: center;
+                color: $dark-color;
+                font-family: 'Josefin Sans', sans-serif;
+            }
+            div.cafe-address {
+                display: block;
+                text-align: center;
+                margin-top: 5px;
+                color: $grey;
+                font-family: 'Lato', sans-serif;
+                span.street {
+                    font-size: 14px;
+                    display: block;
+                }
+                span.city {
+                    font-size: 12px;
+                }
+                span.state {
+                    font-size: 12px;
+                }
+                span.zip {
+                    font-size: 12px;
+                    display: block;
+                }
+                a {
+                    color: $secondary-color;
+                    font-weight: bold;
+                }
+            }
+        }
    }
 </style>
 <template>
@@ -100,6 +135,7 @@ export default {
             //首先清空标记点
             this.markers = [];
             //循环所有的咖啡店的数据填充到标记数组markers中
+            var infoWindow = new AMap.InfoWindow();
             for(var i=0;i<this.cafes.length;i++){
                 //创建一个点标记
                 var marker = new AMap.Marker({
@@ -110,18 +146,27 @@ export default {
                         'cafe':this.cafes[i]
                     }
                 });
-                //创建一个新的信息窗体
-                var infoWindow = new AMap.InfoWindow({
-                    content:this.cafes[i].location_name
-                });
-                this.InfoWindows.push(infoWindow);
+                //凭借信息窗体展示的内容
+                var contentString = '<div class="cafe-info-window">'+
+                                '<div class="cafe-name">'+this.cafes[i].name+this.cafes[i].location_name+'</div>'+
+                                '<div class="cafe-address">'+
+                                '<span class="street">'+this.cafes[i].address+'</span>'+
+                                '<span class="city">'+this.cafes[i].city+'</span>'+
+                                '<span class="state">'+this.cafes[i].state+'</span>'+
+                                '<span class="zip">'+this.cafes[i].zip+'</span>'+
+                                '<a href="/#/cafes/'+this.cafes[i].id+'">Visit</a>'+
+                                '</div></div>';
+                marker.content = contentString;
                 //将窗体和标记点的点击事件绑定起来
-                marker.on('click',function(){
-                    infoWindow.open(this.getMap(),this.getPosition());
-                });
+                marker.on('click',mapClickForWindows);
 
                 //将生成的标记点放置到标记数组中
                 this.markers.push(marker);    
+            }
+
+            function mapClickForWindows(mapEvent){
+                infoWindow.setContent(mapEvent.target.content);
+                infoWindow.open(this.getMap(),this.getPosition());
             }
             //将标记点显示在地图中
             this.map.add(this.markers);
@@ -146,7 +191,6 @@ export default {
                         //所有筛选条件都为空
                         this.markers[i].setMap(this.map);
                 }else{
-                    console.log(this.markers[i].getExtData( ).cafe);
                     //处理文字筛选
                     if(filters.text !='' && this.processCafeTextFliter(this.markers[i].getExtData( ).cafe,filters.text)){
                         textPass = true;

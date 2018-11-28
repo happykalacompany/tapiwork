@@ -12,34 +12,33 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+
+Route::group(['prefix' => 'v1'],function(){
+
+    /**
+     * Url: /api/v1/user
+     * Controller: API\UsersController@getUser
+     * Method: get
+     * Description: get current user
+     */
+
+    Route::get('/user','API\UsersController@getUser');
 
     /**
      * Url: /api/v1/cafes
-     * Controller: API\CafesController@getCafes 
+     * Controller: API\CafesController@getCafes
      * Method: get
      * Description: get all cafes in the application
      */
     Route::get('/cafes','API\CafesController@getCafes');
 
     /**
-     * Url: /api/v1/cafe/{id} 
-     * Controller: API\CafesController@getCafe 
+     * Url: /api/v1/cafe/{id}
+     * Controller: API\CafesController@getCafe
      * Method: get
      * Description: get a cafe detail
      */
     Route::get('/cafe/{id}','API\CafesController@getCafe');
-
-    /**
-     * Url: /api/v1/cafes 
-     * Controller: API\CafesController@postNewCafe 
-     * Method: post
-     * Description: add new cafe
-     */
-    Route::post('/cafes', 'API\CafesController@postNewCafe');
 
     /**
      * Url: /api/v1/brew_methods
@@ -48,6 +47,25 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
      * Description: get all BrewMethod with the count of cafe
      */
     Route::get('/brew_methods','API\BrewMethodsController@getBrewMethods');
+
+    /**
+     * Url:/api/v1/tags
+     * Controller:API\CafesController@getTags
+     * Method:delete
+     * Description:delete cafe tag
+     */
+    Route::get('/tags','API\TagsController@getTags');
+});
+
+//需要登录的路由组
+Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
+    /**
+     * Url: /api/v1/cafes 
+     * Controller: API\CafesController@postNewCafe 
+     * Method: post
+     * Description: add new cafe
+     */
+    Route::post('/cafes', 'API\CafesController@postNewCafe');
 
     /**
      * Url: /api/v1/cafes/{id}/like
@@ -65,7 +83,6 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
      */
     Route::delete('/cafes/{id}/like','API\CafesController@deleteLikeCafe');
 
-
     /**
      * Url:/api/v1/cafe/{id}/tags
      * Controller:API\CafesController@postAddTags
@@ -81,13 +98,4 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
      * Description:delete cafe tag
      */
     Route::delete('/cafe/{id}/tags/{tagId}','API\CafesController@deleteCafeTags');
-
-    /**
-     * Url:/api/v1/tags
-     * Controller:API\CafesController@deleteCafeTags
-     * Method:delete
-     * Description:delete cafe tag
-     */
-    Route::get('/tags','API\TagsController@getTags');
-
 });

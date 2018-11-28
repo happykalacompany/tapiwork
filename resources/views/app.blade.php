@@ -12,6 +12,15 @@
         ]); ?>
     </script>
     <script language="javascript" src="https://webapi.amap.com/maps?v=1.4.8&key=fb7a78fdcc78bd6b20f9feb18b0bf7fa"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130032009-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-130032009-1');
+    </script>
 </head>
 <body>
 <div id="app">

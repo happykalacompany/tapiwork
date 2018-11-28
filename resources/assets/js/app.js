@@ -32,9 +32,17 @@ if (token) {
 
 import Vue from 'vue';
 import router from './routes.js';
-//英语vuex存储示例
+//引入vuex存储示例
 import store from './store.js';
 new Vue({
     router,
     store
 }).$mount('#app');
+
+ga('set', 'page', router.currentRoute.path);
+ga('send', 'pageview');
+
+router.afterEach((to, from) => {
+    ga('set', 'page', to.path);
+    ga('send', 'pageview');
+});

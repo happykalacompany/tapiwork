@@ -6,12 +6,12 @@ var gaode_map_js_api_key = 'fb7a78fdcc78bd6b20f9feb18b0bf7fa';
 var app_url = '';
 switch(process.env.NODE_ENV){
     case'development':
-        api_url = 'http://tapiwork.test/api/v1';
-        app_url = 'http://tapiwork.test';
+        api_url = 'http://happykala.cn/api/v1';
+        app_url = 'http://happykala.cn';
         break;
     case'production':
-        api_url = 'http://tapiwork.test/api/v1';
-        app_url = 'http://tapiwork.test';
+        api_url = 'http://happykala.cn/api/v1';
+        app_url = 'http://happykala.cn';
         break;
 }
 

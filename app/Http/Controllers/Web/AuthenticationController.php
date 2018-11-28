@@ -14,16 +14,6 @@ use Socialite;
 use Auth;
 
 class AuthenticationController extends Controller{
-
-    /**
-     * @abstract 登录界面
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function getLogin(){
-        return view('login');
-    }
-
-
     /**
      * @abstract 跳转到第三方OAuth获取验证码页面的路由
      * @param $account
