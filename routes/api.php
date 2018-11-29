@@ -98,4 +98,13 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'],function(){
      * Description:delete cafe tag
      */
     Route::delete('/cafe/{id}/tags/{tagId}','API\CafesController@deleteCafeTags');
+
+    /**
+     * Url:/api/v1/user
+     * Controller:API\UsersController@putUpdateUser
+     * Method:put
+     * Description:put update user data
+     */
+    Route::put('/user','API\UsersController@putUpdateUser');
+
 });

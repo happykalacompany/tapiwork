@@ -5,3 +5,4 @@
 - 创建软连接 php artisan storage:link
 - 创建数据自动填充类 php artisan make:seeder BrewMethodsSeeder
 - 填充对应的数据表 php artisan db:seed --class=BrewMethodsSeeder   
+- 创建请求验证类 php artisan make:request EditUserRequest

@@ -149,7 +149,7 @@ export default {
             return this.$store.getters.getUser;
         },
         userLoadStatus(){
-            return this.$store.getters.getUserLoadStatus;
+            return this.$store.getters.getUserLoadStatus();
         }
     },
     methods:{

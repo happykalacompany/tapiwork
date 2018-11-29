@@ -81,7 +81,7 @@ export default {
         },
         //获取当前用户的加载状态
         userLoadStatus(){
-            return this.$store.getters.getUserLoadStatus;
+            return this.$store.getters.getUserLoadStatus();
         }
     },
     methods:{

@@ -5,7 +5,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css"/>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <title>tapiwork</title>
+    <title>Hppykala</title>
     <script type='text/javascript'>
         window.Laravel = <?php echo json_encode([
             'csrfToken' => csrf_token(),
