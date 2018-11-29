@@ -86,10 +86,10 @@
         <div class="right">
             <!-- <img class="avatar" :src="user.avatar" v-show="userLoadStatus == 2"/> -->
             <img class="avatar" v-if="user != '' && userLoadStatus === 2" :src="user.avatar" v-show="userLoadStatus === 2">
+            <router-link :to="{name:'profile'}" v-if="user != '' && userLoadStatus === 2" v-show="userLoadStatus === 2">个人信息</router-link>
             <span v-if="user != '' && userLoadStatus === 2" v-on:click="logOut()">退出</span>
             <span class="login" v-if="user == ''" v-on:click="logIn()">登录</span>
         </div>
-
     </nav>
 </template>
 

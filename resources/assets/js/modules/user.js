@@ -24,7 +24,7 @@ export const user = {
         editUser({commit,state,dispatch},data){
             commit('setPutUpdateUserStatus',1);
             UserApI.putUpdateUser(data.favorite_coffee,data.flavor_note,data.profile_visibility,data.city,data.state)
-            .then(function(){
+            .then(function(response){
                 commit('setPutUpdateUserStatus',2);
                 dispatch('loadUser');   
             })

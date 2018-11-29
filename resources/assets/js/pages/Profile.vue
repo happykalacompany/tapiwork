@@ -1,9 +1,54 @@
 <style lang="scss">
     @import '~@/abstracts/_variables.scss';
+    div#profile-page {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: white;
+        z-index: 99999;
+        overflow: auto;
+        img#back {
+            float: right;
+            margin-top: 20px;
+            margin-right: 20px;
+        }
+        div.centered {
+            margin: auto;
+        }
+        h2.page-title {
+            color: #342C0C;
+            font-size: 36px;
+            font-weight: 900;
+            font-family: "Lato", sans-serif;
+            margin-top: 60px;
+        }
+        label.form-label {
+            font-family: "Lato", sans-serif;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: black;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        a.update-profile-button {
+            display: block;
+            text-align: center;
+            height: 50px;
+            color: white;
+            border-radius: 3px;
+            font-size: 18px;
+            font-family: "Lato", sans-serif;
+            background-color: #A7BE4D;
+            line-height: 50px;
+            margin-bottom: 50px;
+        }
+    }
 </style>
 <template>
-    <div class="profile-page">
-        <div id="profile-updated-successfully" class="notification success">
+    <div id="profile" class="page">
+        <div id="profile-updated-successfully" class="notification success" style="display: none;">
             个人信息更新成功
         </div>
         <div class="grid-container">
@@ -64,7 +109,7 @@
     </div>
 </template>
 <script>
-import Loader from '../../components/global/Loader.vue';
+import Loader from '../components/global/Loader.vue';
 export default {
     data(){
         return {
@@ -92,13 +137,15 @@ export default {
     methods:{
         //用户更新提交函数
         updateProfile(){
-            this.$store.dispatch('editUser',{
+            if(this.validateProfile()){
+                this.$store.dispatch('editUser',{
                 favorite_coffee:this.favorite_coffee,
                 flavor_note:this.flavor_note,
                 profile_visibility:this.profile_visibility,
                 city:this.city,
                 state:this.state
             });
+            }
         },
         //设置页面控件值
         setFileds(){
@@ -107,6 +154,10 @@ export default {
             this.profile_visibility = this.user.profile_visibility;
             this.city = this.user.city;
             this.state = this.user.state;
+        },
+        //页面验证函数
+        validateProfile(){
+            return true;
         }
     },
     created(){
