@@ -1,5 +1,5 @@
 <style lang="scss">
-    @import 'resources/assets/sass/abstracts/_variables.scss';
+    @import '~@/abstracts/_variables.scss';
 
     nav.top-navigation{
         background-color: $white;
@@ -55,8 +55,18 @@
                 margin-right: 10px;
             }
         }
-
     }
+    span.login {
+            font-family: "Lato", sans-serif;
+            font-size: 16px;
+            text-transform: uppercase;
+            color: black;
+            font-weight: bold;
+            float: right;
+            margin-top: 13px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
 </style>
 
 <template>
@@ -75,24 +85,36 @@
 
         <div class="right">
             <!-- <img class="avatar" :src="user.avatar" v-show="userLoadStatus == 2"/> -->
+            <img class="avatar" v-if="user != '' && userLoadStatus === 2" :src="user.avatar" v-show="userLoadStatus === 2">
+            <span v-if="user != '' && userLoadStatus === 2" v-on:click="logOut()">退出</span>
+            <span class="login" v-if="user == ''" v-on:click="logIn()">登录</span>
         </div>
 
     </nav>
 </template>
 
 <script>
+    import {EventBus}  from '../../event-bus.js'; 
     export default {
-        // // 定义组件的计算属性
-        // computed: {
-        //     // 从 Vuex 中获取用户加载状态
-        //     userLoadStatus(){
-        //         return this.$store.getters.getUserLoadStatus;
-        //     },
+        // 定义组件的计算属性
+        computed: {
+            // 从 Vuex 中获取用户加载状态
+            userLoadStatus(){
+                return this.$store.getters.getUserLoadStatus;
+            },
 
-        //     // 从 Vuex 中获取用户信息
-        //     user(){
-        //         return this.$store.getters.getUser;
-        //     }
-        // }
+            // 从 Vuex 中获取用户信息
+            user(){
+                return this.$store.getters.getUser;
+            }
+        },
+        methods:{
+            logOut(){
+                
+            },
+            logIn(){
+                EventBus.$emit('promt-login');
+            }
+        }
     }
 </script>

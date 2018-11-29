@@ -55,7 +55,17 @@
             display: inline-block;
             line-height: 20px;
         }
-    }    
+    }
+    
+    div.togglelike-container{
+        text-align: center;
+
+        span.prompt-log-in{
+            cursor: pointer;
+            display: block;
+            text-decoration: underline;
+        }
+    }
 </style>
 
 <template>
@@ -69,9 +79,12 @@
                         <h3 v-if="cafe.location_name != ''">{{ cafe.location_name }}</h3>
 
                         <!--预留的喜欢组件放置的位置-->
-                        <div class="grid-x">
-                            <div class="large-12 medium-12 small-12 cell">
-                                <toggle-like></toggle-like>
+                        <div class="togglelike-container">
+                            <div class="grid-x">
+                                <div class="large-12 medium-12 small-12 cell">
+                                    <toggle-like v-if="user !='' && userLoadStatus === 2"></toggle-like>
+                                    <span class="prompt-log-in" v-if="user === '' && userLoadStatus === 2" v-on:click="logIn()">登录后关注</span>
+                                </div>
                             </div>
                         </div>
                         <div class="tag-contrainer">
@@ -112,6 +125,7 @@
 import IndividualCafeMap from '../components/cafes/IndividualCafeMap.vue';
 import ToggleLike from '../components/cafes/ToggleLike.vue';
 import Loader from '../components/global/Loader.vue';
+import {EventBus} from '../event-bus.js';
 export default {
     components:{
         IndividualCafeMap,
@@ -130,6 +144,17 @@ export default {
         },
         cafe(){
             return this.$store.getters.getCafe;
+        },
+        user(){
+            return this.$store.getters.getUser;
+        },
+        userLoadStatus(){
+            return this.$store.getters.getUserLoadStatus;
+        }
+    },
+    methods:{
+        logIn(){
+            EventBus.$emit('promt-login');
         }
     }
 }
