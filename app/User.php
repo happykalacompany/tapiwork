@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\CafePhoto;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
@@ -34,5 +35,13 @@ class User extends Authenticatable
      */
     public function likes(){
         return $this->belongsToMany(User::class,'users_cafes_likes','cafe_id','user_id');
+    }
+
+    /**
+     * @abstract 标定用户和咖啡店上传图片之间的关系
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function cafePhotos(){
+        return $this->hasMany(CafePhoto::class,'id','cafe_id');
     }
 }

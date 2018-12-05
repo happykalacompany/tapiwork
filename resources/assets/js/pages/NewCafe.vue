@@ -24,6 +24,11 @@
                             <input type="text" placeholder="简介" v-model="description">
                         </label>
                     </div>
+                    <div class="large-12 medium-12 small-12 cell">
+                        <label>图片
+                            <input type="file" id="cafe-photo" ref="photo" v-on:change="handleFileChange()">
+                        </label>
+                    </div>
                 </div>
 
                 <div class="grid-x grid-padding-x" v-for="(location, key) in locations">
@@ -102,6 +107,7 @@ export default {
             website:'',
             description:'',
             roaster:false,
+            picture:'',
             validations:{
                 name:{
                     is_valid:true,
@@ -128,7 +134,8 @@ export default {
                     locations:this.locations,
                     website:this.website,
                     description:this.description,
-                    roaster:this.roaster
+                    roaster:this.roaster,
+                    picture:this.picture
                 });
             }
         },
@@ -239,6 +246,8 @@ export default {
             this.website = '';
             this.roaster = false;
             this.description = '';
+            this.picture = '';
+            this.$refs.photo.value = '';
             this.validations = {
                 name:{
                     is_valid:true,
@@ -257,6 +266,9 @@ export default {
             //清空表单的时候发送clear-tags事件，这个事件会被标签组件监听下来并作出初始化tags输入的动作
             EventBus.$emit('clear-tags');
             this.addLocation();
+        },
+        handleFileChange(){
+            this.picture = this.$refs.photo.files[0];
         }
     },
     created(){

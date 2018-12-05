@@ -58012,7 +58012,7 @@ var cafes = {
 
             //状态1标识新增开始
             commit('setCafeAddStatus', 1);
-            __WEBPACK_IMPORTED_MODULE_0__api_cafe_js__["a" /* default */].postAddNewCafe(data.name, data.locations, data.website, data.description, data.roaster).then(function (response) {
+            __WEBPACK_IMPORTED_MODULE_0__api_cafe_js__["a" /* default */].postAddNewCafe(data.name, data.locations, data.website, data.description, data.roaster, data.picture).then(function (response) {
                 commit('setCafeAddStatus', 2);
                 dispatch('loadCafes');
             }).catch(function () {
@@ -58128,13 +58128,20 @@ var cafes = {
      * 新增一个cafe店
      * post /api/v1/cafes
      */
-    postAddNewCafe: function postAddNewCafe(name, locations, website, description, roaster) {
-        return __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* TAPIWORK_CONFIG */].API_URL + '/cafes', {
-            name: name,
-            locations: locations,
-            website: website,
-            description: description,
-            roaster: roaster
+    postAddNewCafe: function postAddNewCafe(name, locations, website, description, roaster, picture) {
+
+        var formData = new FormData();
+        formData.append('name', name);
+        formData.append('locations', JSON.stringify(locations));
+        formData.append('website', website);
+        formData.append('description', description);
+        formData.append('roaster', roaster);
+        formData.append('picture', picture);
+
+        return __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post(__WEBPACK_IMPORTED_MODULE_0__config_js__["a" /* TAPIWORK_CONFIG */].API_URL + '/cafes', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         });
     },
     /**
@@ -61704,6 +61711,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -61718,6 +61730,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             website: '',
             description: '',
             roaster: false,
+            picture: '',
             validations: {
                 name: {
                     is_valid: true,
@@ -61745,7 +61758,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     locations: this.locations,
                     website: this.website,
                     description: this.description,
-                    roaster: this.roaster
+                    roaster: this.roaster,
+                    picture: this.picture
                 });
             }
         },
@@ -61858,6 +61872,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.website = '';
             this.roaster = false;
             this.description = '';
+            this.picture = '';
+            this.$refs.photo.value = '';
             this.validations = {
                 name: {
                     is_valid: true,
@@ -61876,6 +61892,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //清空表单的时候发送clear-tags事件，这个事件会被标签组件监听下来并作出初始化tags输入的动作
             __WEBPACK_IMPORTED_MODULE_1__event_bus_js__["a" /* EventBus */].$emit('clear-tags');
             this.addLocation();
+        },
+        handleFileChange: function handleFileChange() {
+            this.picture = this.$refs.photo.files[0];
         }
     },
     created: function created() {
@@ -62032,6 +62051,21 @@ var render = function() {
                         return
                       }
                       _vm.description = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "large-12 medium-12 small-12 cell" }, [
+              _c("label", [
+                _vm._v("图片\n                        "),
+                _c("input", {
+                  ref: "photo",
+                  attrs: { type: "file", id: "cafe-photo" },
+                  on: {
+                    change: function($event) {
+                      _vm.handleFileChange()
                     }
                   }
                 })

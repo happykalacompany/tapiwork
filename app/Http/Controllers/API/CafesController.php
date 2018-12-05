@@ -3,6 +3,7 @@ namespace app\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cafe;
+use App\Models\CafePhoto;
 use App\Utilities\GaodeMaps;
 use App\Utilities\Tagger;
 use Carbon\Carbon;
@@ -47,7 +48,6 @@ class CafesController extends Controller{
      * description: add new cafe
      */
     public function postNewCafe(StoreCafeRequest $request){
-
         //已经添加的咖啡店的数据
         $addedCafes = [];
 
@@ -56,7 +56,7 @@ class CafesController extends Controller{
         $parentCafe->name = $request->input('name');
         //获取所有的咖啡店的位置信息
         $locations = $request->input('locations');
-
+        $locations = json_decode($locations,true);
         $parentCafe->location_name = $locations[0]['name']?:'';
         $parentCafe->address = $locations[0]['address']?:'';
         $parentCafe->city = $locations[0]['city']?:'';
@@ -71,6 +71,26 @@ class CafesController extends Controller{
         $parentCafe->added_by = $request->user()->id;
         $parentCafe->parent = 0;
         $parentCafe->save();
+
+        //首先获取到对应的文件
+        $photo = $request->file('picture');
+        if($photo && $photo->isValid()){
+            $destinationPath = storage_path('app/public/photos/'.$parentCafe->id);
+            //检查一下这个目录是否存在
+            if(!file_exists($destinationPath)){
+                mkdir($destinationPath);
+            }
+            //文件的存储名字
+            $filename = time().'-'.$photo->getClientOriginalName();
+            $photo->move($destinationPath,$filename);
+            //在数据库中存储刚刚上传的文件
+            $cafePhoto = new CafePhoto();
+            $cafePhoto->cafe_id = $parentCafe->id;
+            $cafePhoto->uploaded_by = Auth::user()->id;
+            $cafePhoto->file_url = $destinationPath.DIRECTORY_SEPARATOR.$filename;
+            $cafePhoto->save();
+        }
+
 
         //获取总点的冲泡方法并和总店数据关联
         $brewMethods = $locations[0]['methodsAvailable'];

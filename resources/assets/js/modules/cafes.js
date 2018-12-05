@@ -50,7 +50,7 @@
         addCafe({commit, state, dispatch}, data){
             //状态1标识新增开始
             commit('setCafeAddStatus', 1);
-            CafeAPI.postAddNewCafe(data.name, data.locations, data.website, data.description, data.roaster)
+            CafeAPI.postAddNewCafe(data.name, data.locations, data.website, data.description, data.roaster,data.picture)
                    .then(function(response){
                         commit('setCafeAddStatus', 2);
                         dispatch('loadCafes');

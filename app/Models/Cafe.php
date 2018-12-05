@@ -54,4 +54,12 @@ class Cafe extends Model
     public function Tags(){
         return $this->belongsToMany(Tag::class,'cafes_users_tags','cafe_id','tag_id');
     }
+
+    /**
+     * @abstract 标定咖啡店和咖啡店图标之间的关系
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function photo(){
+        return $this->hasMany(CafePhoto::class,'id','cafe_id');
+    }
 }

@@ -20,14 +20,24 @@ export default{
      * 新增一个cafe店
      * post /api/v1/cafes
      */
-    postAddNewCafe: function(name,locations,website,description,roaster){
-        return Axios.post(TAPIWORK_CONFIG.API_URL+ '/cafes',{
-            name:name,
-            locations:locations,
-            website:website,
-            description:description,
-            roaster:roaster
-        })
+    postAddNewCafe: function(name,locations,website,description,roaster,picture){
+
+        let formData = new FormData();
+        formData.append('name',name);
+        formData.append('locations',JSON.stringify(locations));
+        formData.append('website',website);
+        formData.append('description',description);
+        formData.append('roaster',roaster);
+        formData.append('picture',picture);
+
+        return Axios.post(TAPIWORK_CONFIG.API_URL+ '/cafes',
+            formData,
+            {
+                headers:{
+                    'Content-Type':'multipart/form-data'
+                }
+            }
+        )
     },
     /**
      * 关注咖啡店
