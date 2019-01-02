@@ -8,9 +8,9 @@
   * 引入Vue 和 VueRouter 来扩展路由 
   */
 
-  import Vue from 'vue';
-  import VueRouter from 'vue-router';
-  import store from './store.js';  
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import store from './store.js';
 /**
  * 使用VueRouter来扩展Vue的路由
  */
@@ -89,3 +89,4 @@
     ]
  });
 
+    
